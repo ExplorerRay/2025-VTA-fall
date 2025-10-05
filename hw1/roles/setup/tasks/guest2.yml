@@ -6,7 +6,7 @@
       - nfs-common
       - net-tools
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Mount NFS share
   ansible.posix.mount:

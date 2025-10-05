@@ -6,7 +6,7 @@
       - nfs-kernel-server
       - net-tools
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Mkdir /mnt/nfs
   ansible.builtin.file:
@@ -30,4 +30,6 @@
 
 - name: Export /mnt/nfs
   ansible.builtin.command:
-    cmd: "exportfs -arv"
+    cmd: "/usr/sbin/exportfs -arv"
+  register: exportfs_result
+  changed_when: "exportfs_result.rc == 0 and 'exporting' in exportfs_result.stdout"
