@@ -1,0 +1,8 @@
+---
+- name: Setup for guest1
+  ansible.builtin.include_tasks: guest1.yml
+  when: 'inventory_hostname == groups["guests"][0]'
+
+- name: Setup for guest2
+  ansible.builtin.include_tasks: guest2.yml
+  when: 'inventory_hostname == groups["guests"][1]'

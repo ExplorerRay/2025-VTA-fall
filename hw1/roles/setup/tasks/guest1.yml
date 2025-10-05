@@ -1,0 +1,33 @@
+---
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name:
+      - qemu-kvm
+      - nfs-kernel-server
+      - net-tools
+    state: present
+    update_cache: yes
+
+- name: Mkdir /mnt/nfs
+  ansible.builtin.file:
+    path: /mnt/nfs
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0777'
+
+- name: Create qemu image file
+  ansible.builtin.command:
+    cmd: "qemu-img create -f qcow2 deb.qcow2 10G"
+  args:
+    creates: /mnt/nfs/deb.qcow2
+
+- name: Add /mnt/nfs to /etc/exports
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    line: "/mnt/nfs *(rw,sync,no_subtree_check,no_root_squash)"
+    state: present
+
+- name: Export /mnt/nfs
+  ansible.builtin.command:
+    cmd: "exportfs -arv"

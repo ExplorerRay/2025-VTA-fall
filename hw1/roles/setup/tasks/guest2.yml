@@ -1,0 +1,16 @@
+---
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name:
+      - qemu-kvm
+      - nfs-common
+      - net-tools
+    state: present
+    update_cache: yes
+
+- name: Mount NFS share
+  ansible.posix.mount:
+    path: /mnt/nfs
+    src: "{{ groups['guests'][0] }}:/mnt/nfs"
+    fstype: nfs
+    state: mounted

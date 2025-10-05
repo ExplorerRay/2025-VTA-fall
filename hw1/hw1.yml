@@ -1,0 +1,8 @@
+---
+- name: Prepare VM guests
+  gather_facts: false
+  become: true
+  hosts: "{{ var_host | default('all') }}"
+  roles:
+    - role: setup
+      tags: setup
