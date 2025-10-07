@@ -2,11 +2,18 @@
 - name: Install necessary packages
   ansible.builtin.apt:
     name:
+      - sudo
       - qemu-kvm
       - nfs-kernel-server
       - net-tools
     state: present
     update_cache: true
+
+- name: Copy shell script
+  ansible.builtin.copy:
+    src: qm1.sh
+    dest: /home/ray/qm1.sh
+    mode: '0664'
 
 - name: Mkdir /mnt/nfs
   ansible.builtin.file:

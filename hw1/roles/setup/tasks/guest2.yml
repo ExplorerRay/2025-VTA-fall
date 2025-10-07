@@ -2,11 +2,18 @@
 - name: Install necessary packages
   ansible.builtin.apt:
     name:
+      - sudo
       - qemu-kvm
       - nfs-common
       - net-tools
     state: present
     update_cache: true
+
+- name: Copy shell script
+  ansible.builtin.copy:
+    src: qm2.sh
+    dest: /home/ray/qm2.sh
+    mode: '0664'
 
 - name: Mount NFS share
   ansible.posix.mount:
