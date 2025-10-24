@@ -5,13 +5,13 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-#define SERVER_ADDRESS "PLEASE ASSIGN"
-#define SERVER_PORT PLEASE ASSIGN
+#define SERVER_ADDRESS "192.168.10.11"
+#define SERVER_PORT 8888
 
 int main() {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *hello = "Hello from <your student ID>";
+    char *hello = "Hello from 314552013";
     char buffer[1024] = {0};
 
     // 建立 socket
