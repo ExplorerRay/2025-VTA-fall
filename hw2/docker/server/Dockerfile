@@ -1,4 +1,4 @@
-FROM gcc:12.2.0
+FROM debian:stable-slim
 
 USER root
 
