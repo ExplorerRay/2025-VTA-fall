@@ -13,12 +13,12 @@ void handler(int _) {
 
 int callback(void *_, void *data, size_t sz) {
     const struct event *e = data;
-    
+
     char src[INET_ADDRSTRLEN];
     char dst[INET_ADDRSTRLEN];
     struct in_addr saddr = {.s_addr = e->saddr};
     struct in_addr daddr = {.s_addr = e->daddr};
-    
+
     printf("%-7d %-16s %-16s:%-6d --> %-16s:%-6d %.2f\n", e->pid, e->comm,
         inet_ntop(AF_INET, &saddr, src, sizeof(src)), e->sport,
         inet_ntop(AF_INET, &daddr, dst, sizeof(dst)), e->dport,
@@ -41,8 +41,7 @@ int main() {
         goto destroy;
     }
 
-    // FIXME: Initialize a new ring buffer `rb`
-    // struct ring_buffer *rb = ... ;
+    struct ring_buffer *rb = ring_buffer__new(bpf_map__fd(skel->maps.rb), callback, NULL, NULL);
     if (!rb) {
         perror("ringbuf create");
         goto destroy;
@@ -50,8 +49,7 @@ int main() {
 
     printf("%-7s %-16s %-23s     %-23s %s\n", "PID", "COMM", "SRC", "DST", "LAT(ms)");
     while (cont) {
-        // FIXME: Poll the ring buffer
-        // err = ... ;
+        err = ring_buffer__poll(rb, 100 /* timeout, ms */);
         if (err < 0 && err != -EINTR) {
             perror("ringbuf poll");
             goto destroy;

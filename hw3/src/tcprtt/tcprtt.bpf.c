@@ -20,8 +20,8 @@ int BPF_PROG(tcp_rcv, struct sock *sk)
     if (sk->__sk_common.skc_family != AF_INET)
         return 0;
 
-    // FIXME: Reserve space in ring buffer `rb` for the event `e`
-    // struct event *e = ... ;
+    struct event *e;
+    e = bpf_ringbuf_reserve(&rb, sizeof(*e), 0);
     if (!e)
         return 0;
 
@@ -37,8 +37,7 @@ int BPF_PROG(tcp_rcv, struct sock *sk)
     e->pid = bpf_get_current_pid_tgid() >> 32;
     bpf_get_current_comm(&e->comm, sizeof(e->comm));
 
-    // FIXME: Submit your event `e` to ring buffer `rb`
-    // ...
+    bpf_ringbuf_submit(e, 0);
     return 0;
 }
 
